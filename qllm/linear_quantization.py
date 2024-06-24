@@ -1,11 +1,12 @@
+from typing import List
+
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 from qllm.quantizer import Quantizer
 
 
-class LinearQuantizer(Quantizer):
+class LinearTensorQuantizer(Quantizer):
     def __init__(self, tensor, scale, zero_point, dtype=torch.int8):
         self.tensor = tensor
         self.scale = scale
@@ -37,58 +38,54 @@ class LinearQuantizer(Quantizer):
         return dequantized_tensor
 
 
-class W8A16LLqllm(nn.Module):
-    def __init__(
-        self,
-        in_features,
-        out_features,
-        bias=True,
-        dtype=torch.float32,
-    ) -> None:
+class LinearQuantizer(Quantizer):
+    def __init__(self, modules_to_exclude: List[str]) -> None:
         super().__init__()
 
-        self.register_buffer(
-            "int8_weights",
-            torch.randint(
-                -128,
-                128,
-                (out_features, in_features),
-                dtype=torch.int8,
-            ),
-        )
-        self.register_buffer(
-            "scales",
-            torch.randn(
-                (out_features),
-                dtype=dtype,
-            ),
-        )
+    @classmethod
+    def replace_modules(cls, model, target_layer, module_name_to_exclude):
+        for name, child in model.named_children():
+            if isinstance(child, nn.Linear) and not any(
+                [x == name for x in module_name_to_exclude]
+            ):
+                old_bias = child.bias
 
-        if bias:
-            self.register_buffer(
-                "bias",
-                torch.randn(
-                    (1, out_features),
-                    dtype=dtype,
-                ),
-            )
+                new_module = target_layer(
+                    child.in_features,
+                    child.out_features,
+                    old_bias is not None,
+                    child.weight.dtype,
+                )
+                setattr(model, name, new_module)
+                if old_bias is not None:
+                    getattr(model, name).bias = old_bias
+            else:
+                # Recursively call the function for nested modules
+                cls.replace_modules(child, target_layer, module_name_to_exclude)
 
-        else:
-            self.bias = None
+    @classmethod
+    def replace_and_quantize_modules(cls, model, target_layer, module_name_to_exclude):
+        for name, child in model.named_children():
+            if isinstance(child, nn.Linear) and not any(
+                [x == name for x in module_name_to_exclude]
+            ):
+                old_bias = child.bias
+                old_weight = child.weight
 
-    def w8_a16_forward(weight, input, scales, bias=None):
-        casted_weights = weight.to(input.dtype)
-        output = F.linear(input, casted_weights) * scales
+                new_module = target_layer(
+                    child.in_features,
+                    child.out_features,
+                    old_bias is not None,
+                    child.weight.dtype,
+                )
+                setattr(model, name, new_module)
 
-        if bias is not None:
-            output = output + bias
+                getattr(model, name).quantize(old_weight)
 
-        return output
-
-    def forward(self, input):
-        casted_weights = self.int8_weights.to(input.dtype)
-        output = F.linear(input, casted_weights) * self.scales
-        if self.bias is not None:
-            output = output + self.bias
-
-        return output
+                if old_bias is not None:
+                    getattr(model, name).bias = old_bias
+            else:
+                # Recursively call the function for nested modules
+                cls.replace_and_quantize_modules(
+                    child, target_layer, module_name_to_exclude
+                )
