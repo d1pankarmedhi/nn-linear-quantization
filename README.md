@@ -1,9 +1,16 @@
-# qllm
-🌩 Light weight model quantization tool
+<div align="center";>
+<h1>qllm</h1>
+<h3>🌩 Lightweight model quantization tool </h3>
+</div>
 
-The motivation of this tool is to reduce model size and memory usage for inference. Storing large models is often a hassle, especially when we are dealing with edge devices. Model with smaller footprint is often makes the job easy and effecient when it comes to inference processes.
 
-**qllm** enables developers to quantize any huggingface model from the HF_hub without loosing much on the performance and accuracy. The underlining method is a simple linear quantization technique (both asymmetric and symmetric) enabling quick and ready to go quantiztion on the fly. 
+
+The motivation behind this tool is to reduce model size and memory usage for inference. Storing large models can be burdensome, especially when dealing with edge devices. A model with a smaller footprint often simplifies and streamlines the inference process.
+
+**qllm** tool allows developers to quantize any Hugging Face model from the HF Hub without losing much in terms of performance and accuracy. The underlying method is a simple linear quantization technique (both asymmetric and symmetric), enabling quick and ready-to-go quantization on the fly.
+
+
+> **Note**: This tool is not ready for production environments and should only be used for building intuition. Consider it a tool for model quantization experimentation.
 
 ## Getting started
 
