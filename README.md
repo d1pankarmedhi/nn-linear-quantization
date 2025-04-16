@@ -83,7 +83,7 @@ It allows developers to quantize any Hugging Face model from the HF Hub without 
 
 ## Observation
 
-There is around a 45.68% reduction in model footprint. This may not be the same for every model, but a reduction of anywhere around 30% is significantly helpful from the inference point of view.
+There is around a `45.68%` reduction in model footprint. This may not be the same for every model, but a reduction of anywhere around 30% is significantly helpful from the inference point of view.
 
 ## Key Features
 
