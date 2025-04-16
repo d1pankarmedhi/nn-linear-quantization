@@ -85,12 +85,6 @@ It allows developers to quantize any Hugging Face model from the HF Hub without 
 
 There is around a `45.68%` reduction in model footprint. This may not be the same for every model, but a reduction of anywhere around 30% is significantly helpful from the inference point of view.
 
-## Key Features
-
--   **Lightweight Quantization:** Utilizes simple linear quantization techniques for efficient model compression.
--   **Flexibility:** Supports both asymmetric and symmetric quantization.
--   **Layer-Specific Quantization:** Allows targeting specific linear layers for quantization (e.g., `lm_head`).
-
 ### Linear Quantization
 
 -   **Symmetric Quantization:** The range of quantized values is symmetric around zero. This is simpler but might be less accurate if the data is not centered around zero.
