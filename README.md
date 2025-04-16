@@ -27,20 +27,12 @@ It allows developers to quantize any Hugging Face model from the HF Hub without 
     )
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     
-    # Get the original model size
-    param_size = 0
-    for param in model.parameters():
-        param_size += param.nelement() * param.element_size()
-    buffer_size = 0
-    for buffer in model.buffers():
-        buffer_size += buffer.nelement() * buffer.element_size()
-    orig_size_mb = (param_size + buffer_size) / (1024 ** 2)
-    
-    print(f"# The Original footprint of the model: {orig_size_mb:.6f} MB")
+    # Get the original model size   
+    print(f"Original footprint of the model: {model.get_memory_footprint()/1e+6} MB")
     ```
 
     ```
-	# The Original footprint of the model: 662.392832 MB
+    # The Original footprint of the model: 662.392832 MB
     ```
 
 
@@ -68,15 +60,7 @@ It allows developers to quantize any Hugging Face model from the HF Hub without 
     LinearQuantizer.replace_and_quantize_modules(model, W8A16LL, ['lm_head'])
     
     # Get the quantized model size
-    quantized_param_size = 0
-    for param in model.parameters():
-        quantized_param_size += param.nelement() * param.element_size()
-    quantized_buffer_size = 0
-    for buffer in model.buffers():
-        quantized_buffer_size += buffer.nelement() * buffer.element_size()
-    quantized_size_mb = (quantized_param_size + quantized_buffer_size) / (1024 ** 2)
-    print(f"# Model footprint after quantization: {quantized_size_mb:.6f} MB")
-    
+    print(f"Model footprint after quantization: {model.get_memory_footprint()/1e+6} MB")
     ```
     
     ```
