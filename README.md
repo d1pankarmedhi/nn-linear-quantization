@@ -1,13 +1,20 @@
 <div align="center">
-<h1>nn-linear-quantization</h1>
-<h3>Linear Quantization of neural networks </h3>
+<h1>Linear Quantization for Neural Networks</h1>
 </div>
 
-The motivation behind this tool is to reduce model size and memory usage for inference. Storing large models can be burdensome, especially when dealing with edge devices. A model with a smaller footprint often simplifies and streamlines the inference process.
+The motivation behind this project is to reduce model size and memory usage for inference. Storing large models can be burdensome, especially when dealing with edge devices. A model with a smaller footprint often simplifies and streamlines the inference process.
 
 It allows developers to quantize any Hugging Face model from the HF Hub without losing much in terms of performance and accuracy. The underlying method is a simple linear quantization technique (both asymmetric and symmetric), enabling quick and ready-to-go quantization on the fly.
 
 > **Note**: This tool is not ready for production environments and should only be used for building intuition. Consider it a tool for model quantization experimentation.
+
+## Linear Quantization
+
+-   **Symmetric Quantization:** The range of quantized values is symmetric around zero. This is simpler but might be less accurate if the data is not centered around zero.
+-   **Asymmetric Quantization:** The range of quantized values is not necessarily symmetric around zero and uses a zero-point offset. This can provide better accuracy for data that is not centered around zero.
+
+The `W8A16LL` layer indicates a quantization scheme where weights are quantized to 8 bits (W8) and activations remain in 16-bit floating-point (A16) during the forward pass within the quantized linear layer.
+
 
 ## Getting Started
 
@@ -85,12 +92,6 @@ It allows developers to quantize any Hugging Face model from the HF Hub without 
 
 There is around a `45.68%` reduction in model footprint. This may not be the same for every model, but a reduction of anywhere around 30% is significantly helpful from the inference point of view.
 
-### Linear Quantization
-
--   **Symmetric Quantization:** The range of quantized values is symmetric around zero. This is simpler but might be less accurate if the data is not centered around zero.
--   **Asymmetric Quantization:** The range of quantized values is not necessarily symmetric around zero and uses a zero-point offset. This can provide better accuracy for data that is not centered around zero.
-
-The `W8A16LL` layer indicates a quantization scheme where weights are quantized to 8 bits (W8) and activations remain in 16-bit floating-point (A16) during the forward pass within the quantized linear layer.
 
 ## Contribution 
 
