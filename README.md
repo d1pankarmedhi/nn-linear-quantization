@@ -13,8 +13,14 @@ It allows developers to quantize any Hugging Face model from the HF Hub without 
 -   **Symmetric Quantization:** The range of quantized values is symmetric around zero. This is simpler but might be less accurate if the data is not centered around zero.
 -   **Asymmetric Quantization:** The range of quantized values is not necessarily symmetric around zero and uses a zero-point offset. This can provide better accuracy for data that is not centered around zero.
 
-![image](https://github.com/user-attachments/assets/0d798b63-20a8-4d04-9286-b14d7655e141)
-
+<div align="center">
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/0d798b63-20a8-4d04-9286-b14d7655e141" width="400"/></td>
+    <td><img src="https://github.com/user-attachments/assets/7688e436-2606-46d5-bb08-0c51807c89af" width="300"/></td>
+  </tr>
+</table>
+</div>
 
 The `W8A16LL` layer indicates a quantization scheme where weights are quantized to 8 bits (W8) and activations remain in 16-bit floating-point (A16) during the forward pass within the quantized linear layer.
 
