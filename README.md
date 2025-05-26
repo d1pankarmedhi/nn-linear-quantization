@@ -6,8 +6,6 @@ The motivation behind this project is to reduce model size and memory usage for 
 
 It allows developers to quantize any Hugging Face model from the HF Hub without losing much in terms of performance and accuracy. The underlying method is a simple linear quantization technique (both asymmetric and symmetric), enabling quick and ready-to-go quantization on the fly.
 
-> **Note**: This tool is not ready for production environments and should only be used for building intuition. Consider it a tool for model quantization experimentation.
-
 ## Linear Quantization
 
 -   **Symmetric Quantization:** The range of quantized values is symmetric around zero. This is simpler but might be less accurate if the data is not centered around zero.
